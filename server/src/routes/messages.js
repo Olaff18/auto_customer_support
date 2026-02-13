@@ -1,23 +1,23 @@
 import express from "express";
 import Message from "../models/Message.js";
-import { generateReply } from "../openai.js";
+import { generateReply } from "../groq.js";
 
 const router = express.Router();
 
-// Get all messages
+// get all messages
 router.get("/", async (req, res) => {
   const messages = await Message.findAll();
   res.json(messages);
 });
 
-// Add new message
+// add new message
 router.post("/", async (req, res) => {
   const { customerEmail, text } = req.body;
   const msg = await Message.create({ customerEmail, text });
   res.json(msg);
 });
 
-// Save reply to message
+// save reply to message
 router.post("/:id/reply", async (req, res) => {
   const { reply } = req.body;
   const message = await Message.findByPk(req.params.id);
@@ -32,7 +32,7 @@ router.post("/:id/ai-reply", async (req, res) => {
 
   if (!message) return res.status(404).json({ error: "Message not found" });
 
-  // call OpenAI
+  // call Groq
   const replyText = await generateReply(message.text);
 
   res.json({ reply: replyText });

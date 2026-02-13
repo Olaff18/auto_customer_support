@@ -12,15 +12,15 @@ app.use(express.json());
 
 app.use("/messages", messageRoutes);
 
-// Test database connection
+// test database connection
 sequelize.authenticate()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
-  .catch(err => console.error("✅ Database connection failed:", err));
+  .then(() => console.log("Connected to PostgreSQL"))
+  .catch(err => console.error("Database connection failed:", err));
 
 import Message from "./models/Message.js";
 
 sequelize.sync({ alter: true }).then(() => {
-  console.log("✅ Database synced");
+  console.log("Database synced");
 });
 
 
