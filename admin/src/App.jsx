@@ -25,6 +25,21 @@ function App() {
     setSelected(null);
   };
 
+const generateAIReply = async () => {
+  if (!selected) return;
+
+  try {
+    const res = await fetch(`http://localhost:4000/messages/${selected.id}/ai-reply`, {
+      method: "POST",
+    });
+    const data = await res.json();
+    setReply(data.reply);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to generate AI reply.");
+  }
+};
+
   return (
     <div className="app-container">
       <div className="sidebar">
@@ -59,7 +74,12 @@ function App() {
               onChange={(e) => setReply(e.target.value)}
               placeholder="Write your response..."
             />
-
+            <button
+              onClick={generateAIReply}
+              style={{ background: "#28a745", marginRight: "10px" }}
+            >
+              Generate AI Reply
+            </button>
             <button onClick={sendReply}>Send Reply</button>
           </>
         ) : (
